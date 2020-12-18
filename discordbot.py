@@ -1,35 +1,28 @@
-# インストールした discord.py を読み込む
 import discord
+from discord.ext import commands
 import settings
 from genshinNotificationBot import genshinNotificationBot
 
-# 接続に必要なオブジェクトを生成
-client = discord.Client()
-bot = genshinNotificationBot()
+discordBot = commands.Bot(command_prefix='/')
+genshinBot = genshinNotificationBot()
 
 # 起動時に動作する処理
-@client.event
+@discordBot.event
 async def on_ready():
-    # 起動したらターミナルにログイン通知が表示される
     print('ログインしました')
+    print(discordBot.user.name)
+    print(discordBot.user.id)
 
-# メッセージ受信時に動作する処理
-@client.event
-async def on_message(message):
-    # メッセージ送信者がBotだった場合は無視する
-    if message.author.bot:
-        return
+@discordBot.command()
+async def daily(ctx):
+    await ctx.send(embed=genshinBot.getDaily())
 
-    if message.content == '/daily':
-        await message.channel.send(embed=bot.getDaily())
+@discordBot.command()
+async def weekly(ctx):
+    for _message in genshinBot.getWeekly():
+        if isinstance(_message, str): 
+            await ctx.send(_message)
+        else: 
+            await ctx.send(embed =_message)
 
-    if message.content == '/weekly':
-        for _message in bot.getWeekly():
-            if isinstance(_message, str): 
-                await message.channel.send(_message)
-            else: 
-                await message.channel.send(embed =_message)
-
-
-# Botの起動とDiscordサーバーへの接続
-client.run(settings.DiscordApiKey)
+discordBot.run(settings.DiscordApiKey)
