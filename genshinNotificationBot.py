@@ -18,12 +18,13 @@ def isReactionEmoji(Flag):
 
 
 class genshinNotificationBot:
-    daily = {"resin":0,"task":False,"pickingUpRelics":False}
+    resin = 0;
+    daily = {"task":False,"pickingUpRelics":False}
     weekly = {"boss":{"Dvalin":False,"Andrius":False,"Childe":False},"reputation":{"bounties":0,"requests":0}}
 
     def getDaily(self):
         embed = discord.Embed(title="デイリー",description=datetime.date.today().strftime("%m/%d")+"日分",color=isEmbedColor( self.daily["task"] and self.daily["pickingUpRelics"] ))
-        embed.add_field(name="樹脂", value= "{}/160(残り時間:{}分 満杯{})".format(self.daily["resin"],(160-self.daily["resin"])*8,(datetime.datetime.now()+datetime.timedelta(minutes=(160-self.daily["resin"])*8)).strftime("%H:%M")), inline=False)
+        embed.add_field(name="樹脂", value= "{}/160(残り時間:{}分 満杯{})".format(self.resin,(160-self.resin)*8,(datetime.datetime.now()+datetime.timedelta(minutes=(160-self.resin)*8)).strftime("%H:%M")), inline=False)
         embed.add_field(name="任務", value= isReactionEmoji(self.daily["task"]), inline=True)
         embed.add_field(name="聖遺物拾い", value= isReactionEmoji( self.daily["pickingUpRelics"]), inline=True)
         embed.set_footer(text="更新は5時")
@@ -49,7 +50,10 @@ class genshinNotificationBot:
     def set(self, *args):
         #すごい雑実装したのであとでなおす
         print(args);
-        if(args[0]=="daily"):
+        if(args[0]=="resin"):
+            self.resin = int(args[1])
+            return self.resin
+        elif(args[0]=="daily"):
             self.daily[args[1]] = args[2] 
             return self.daily
         elif(args[0]=="weekly"):
