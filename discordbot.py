@@ -1,15 +1,18 @@
 # インストールした discord.py を読み込む
 import discord
 import settings
+from genshinNotificationBot import genshinNotificationBot
 
 # 接続に必要なオブジェクトを生成
 client = discord.Client()
+bot = genshinNotificationBot()
 
 # 起動時に動作する処理
 @client.event
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print('ログインしました')
+    print(bot.daily)
 
 # メッセージ受信時に動作する処理
 @client.event
@@ -22,12 +25,7 @@ async def on_message(message):
         await message.channel.send('にゃーん')
 
     if message.content == '/daily':
-        embed=discord.Embed(title="デイリー", description="today", color=0x31af4b)
-        embed.add_field(name="樹脂", value="21/160(残り時間:Xmin 満杯HH:MM)", inline=False)
-        embed.add_field(name="任務", value=":white_check_mark:", inline=True)
-        embed.add_field(name="聖遺物拾い", value=":white_check_mark:", inline=True)
-        embed.set_footer(text="更新は5時")
-        await message.channel.send(embed=embed)
+        await message.channel.send(embed=bot.getDaily())
 
     if message.content == '/weekly':
         embed=discord.Embed(title="ボス", color=0x31af4b)
