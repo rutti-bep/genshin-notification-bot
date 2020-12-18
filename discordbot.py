@@ -25,4 +25,8 @@ async def weekly(ctx):
         else: 
             await ctx.send(embed =_message)
 
+@discordBot.command()
+async def set(ctx,*args):
+    await ctx.send( genshinBot.set(*args));
+
 discordBot.run(settings.DiscordApiKey)

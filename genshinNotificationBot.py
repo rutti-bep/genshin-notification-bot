@@ -46,3 +46,13 @@ class genshinNotificationBot:
 
         return messages
 
+    def set(self, *args):
+        #すごい雑実装したのであとでなおす
+        print(args);
+        if(args[0]=="daily"):
+            self.daily[args[1]] = args[2] 
+            return self.daily
+        elif(args[0]=="weekly"):
+            self.weekly[args[1]][args[2]] = args[3]
+            return self.weekly
+
