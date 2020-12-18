@@ -12,7 +12,6 @@ bot = genshinNotificationBot()
 async def on_ready():
     # 起動したらターミナルにログイン通知が表示される
     print('ログインしました')
-    print(bot.daily)
 
 # メッセージ受信時に動作する処理
 @client.event
@@ -28,18 +27,12 @@ async def on_message(message):
         await message.channel.send(embed=bot.getDaily())
 
     if message.content == '/weekly':
-        embed=discord.Embed(title="ボス", color=0x31af4b)
-        embed.add_field(name="トワリン", value=":x:", inline=True)
-        embed.add_field(name="狼", value=":white_check_mark:", inline=True)
-        embed.add_field(name="タルタル", value=":x:", inline=True)
-        await message.channel.send(embed=embed)
+        for _message in bot.getWeekly():
+            if isinstance(_message, str): 
+                await message.channel.send(_message)
+            else: 
+                await message.channel.send(embed =_message)
 
-        embed=discord.Embed(title="評判", color=0xc30404)
-        embed.add_field(name="討伐", value="1/3", inline=True)
-        embed.add_field(name="任務", value="3/3", inline=True)
-        await message.channel.send(embed=embed)
-
-        await message.channel.send('*mm/ddまで*')
 
 # Botの起動とDiscordサーバーへの接続
 client.run(settings.DiscordApiKey)
